@@ -1,0 +1,227 @@
+(function() {
+	'use strict';
+
+	angular.module('amionApp').factory('appDbSvc', ['$rootScope', '_devMode',  'appConfig', appDbSvc]);
+
+	function appDbSvc($rootScope, _devMode, appConfig) {
+
+//console.log('appDbSvc, dev mode =', _devMode);
+	//-- CONSTANTS --//	
+	self.clientDBID="amion00";
+	self.urlCouchDBonLocalhost= "http://localhost:5984/"+self.clientDBID;
+	self.urlCouchDBonWeb="http://amiontrack.iriscouch.com/"+self.clientDBID;
+
+	// var self = this;
+	self.mainDbOpen = false;
+	self.itemMasterList = []; // pop'd by the DB.onchange method
+	self.catMasterList= []; // pop'd by the DB.onchange method
+	self.shoppingLists= []; // pop'd by the DB.onchange method
+	self.currShoppingList = [];
+	
+	var _categoriesDocId = 'category:';
+	var _itemDocId='item:';
+	var _shopDocId='shop:';
+	var _histDocId='hist:';
+	var _recurDocId='recur:';
+
+	var _blkCategories = {
+		"_id" : _categoriesDocId+"new category",
+		"items" : [
+		{"seq_num" : 0,
+		"item_id": ""}
+		] };
+				
+	//-- SET DEFAULTS --//
+	self.isOnLine = false;  // offline by default
+	if (_devMode) { self.useWebUrl  = false; } // development will use localhost:5984 by default
+		else { self.useWebUrl = true; }
+
+	if (self.useWebUrl) {
+		changeWebUrl(true);
+	} 
+	else {	changeWebUrl(false); // using the local host instance of CouchDb by default
+	}
+
+if (_devMode) {	console.log('URL of CouchDB -->', self.remoteDBcurrDomain ); }	
+	
+	// -- MANAGE ON/OFF-LINE DB --//
+	/** Admin DB functions
+		isOnLine: function() {return self.isOnLine; },
+		isRemoteDbSetToWeb: function() {return self.useWebUrl; },
+		connectRemoteDb: function (isWeb) {connectRemoteDb();},
+		disconnectRemoteDb: function (isWeb) {disconnectRemoteDb();},
+	**/
+ 
+	function changeWebUrl(isWeb) {
+		self.useWebUrl = isWeb;
+		if (self.useWebUrl) {
+			self.remoteDBcurrDomain = appConfig.urlWebCouchDB;
+		} 
+		else {	self.remoteDBcurrDomain = self.urlCouchDBonLocalhost; // using the local host instance of CouchDb by default
+		}
+	} //  function changeWebUrl
+
+	
+	//--- OPEN POUCH DBs ---//
+	function openMainDb() {
+
+		self.localMainDb = new PouchDB("workorders");        
+		self.localMainDb.then ( function () {	
+			self.mainDbOpen = true;
+if (_devMode) {console.log('Opened Main DB'); }	
+			self.localMainDb .changes({
+				continuous: true,
+				onChange: function(change) {
+					if (!change.deleted) {
+						$rootScope.$apply(function() {
+							self.localMainDb .get(change.id, function(err, doc) {
+								//self. woMasterList.push(doc);
+if (_devMode) {console.log('onChange - broadcast add Rec:', doc); }
+								$rootScope.$apply(function() {
+									if (err) console.log(err);
+									$rootScope.$broadcast('add', doc);
+								});
+							});
+						});
+					} else {
+						$rootScope.$apply(function() {
+							$rootScope.$broadcast('delete', change.id);
+						});
+					} // else
+				} // function(change)
+			}); //  self.localMainDb .changes
+		}); //self.localMainDb.then
+	} // function openMainDb(
+
+	function connectRemoteDb() {
+		if (!self.isConnectedToRemoteDb) { // only do if NOT ALREADY CONNECTED!!!
+
+			if (self.useWebUrl) {				
+				self.remoteDBcurrDomain = self.urlCouchDBonWeb;
+			} else { // CouchDB is Localhost	
+				self.remoteDBcurrDomain = self.urlCouchDBonLocalhost; // use PC / local CouchDB
+			}
+
+if (_devMode) {console.log('BEFORE connecting to REMOTE Workorders DB', self.remoteDBcurrDomain); }	
+			self.remoteMainDb = new PouchDB(self.remoteDBcurrDomain+"amiongroclist");   
+if (_devMode) {console.log('AFTER connecting to REMOTE Workorders DB', self.remoteMainDb); }
+/***
+			self.remoteMainDb.then ( function () {              
+				self.localMainDb.sync(self.remoteMainDb, {live: true});
+if (_devMode) {console.log('after connecting to REMOTE Workorders DB', self.remoteMainDb);
+			} );
+****/			
+		} // only do if NOT already connected
+	} // function connectRemoteDb
+
+
+
+
+
+	function disconnectRemoteDb () {
+		if (self.offlineDB ) {
+
+		}
+		else {
+
+		}
+	}	
+
+
+
+	// --- DB UPDATES --- //
+	// 
+	//  -- UPDATE  DATABASE RECS  -- //
+		function updateCategoriesDoc() {
+if (_devMode) {console.log('updateCategoriesDoc -->', self.currentWo);}
+			self.localMainDb.put(
+				self.catalogDbDoc
+			).then(function (response) {
+if (_devMode)  {console.log('updateCategoriesDoc --> SUCCESS!'); }
+			  // handle response
+			}).catch(function (err) {
+			  console.log(err);
+			});
+		} // function updateCategoriesDoc
+
+		function updateData (whichObj, newObj) {				
+			var tmpObj = [];
+			var itemFound = false;
+			var  ok = false;
+
+			switch(whichObj) {
+			case 'categories':
+				var listArray = self.catMasterList;
+if (_devMode) {console.log('updateData ENTER-->', newObj); }
+				if (angular.isUndefined(listArray)) { // this will be the first object in the array
+					self.catMasterList = []; 
+				}
+				else
+				{ // first, confirm that this entry does not currently exist	
+					var target_seqnum = newObj.seq_num;
+
+					angular.forEach(listArray, function(forItem) {
+if (_devMode) {console.log('checking forEach updateData -->', forItem); }
+						if (forItem.seq_num === target_seqnum) { // found the rec existing
+							tmpObj.push(newObj); // add new Object
+						itemFound = true;
+if (_devMode) {console.log('FOUND EXISTING REC -->', forItem, newObj);  }
+						} // if found the rec existing
+						else {
+							tmpObj.push(forItem);	 // else add the current forEach-item						
+						} // not found - add old one to the tmpObj array
+					}); // forEach								
+				} // 
+
+				if ( itemFound ){ // then replace
+					self.catMasterList = tmpObj;
+				}
+				else {  
+					self.catMasterList.push(newObj);
+				}
+if (_devMode) {console.log('updateData - BEFORE DB UPDATE, itemFound & mobnotes:',  itemFound, self.catMasterList); }
+				// ok = updateCategoriesDoc();
+
+				return self.catMasterList;
+			case 'X':
+				// code block;
+				break;
+			default:
+				ok = false;		
+			} // switch				
+			//$rootScope.$broadcast('addMyNotes', newObj);
+				
+			 return [];			
+		} // function updateData
+
+
+
+	function getCategoryList() {
+		if (self.mainDbOpen) {
+			return self.catMasterList;
+		}
+		else {
+			openMainDb();
+			return self.catMasterList;
+		}
+	} // function getCategoryList
+		
+
+
+// ---- RESULTS ---- //
+	return {
+		// Admin DB functions
+		changeWebUrl: function(isWeb) { changeWebUrl(isWeb); },
+		isOnLine: function() {return self.isOnLine; },
+		isRemoteDbSetToWeb: function() {return self.useWebUrl; },
+		connectRemoteDb: function () {connectRemoteDb();},
+		disconnectRemoteDb: function () {disconnectRemoteDb();},
+
+		// update documents
+		updateData: function (whichObj, newObj) { updateData(whichObj, newObj); },
+
+		// retrieve documents	
+		getCategoryList: function () {getCategoryList(); }
+	};
+}
+})();

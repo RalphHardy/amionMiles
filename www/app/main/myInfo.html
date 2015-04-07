@@ -1,0 +1,62 @@
+<ion-view view-title="amIonTrack">
+<ion-content class="padding">
+
+	<div class="list card">
+	<div class="item item-divider">FILLIN</div>
+		<div class="item item-body">
+			<div>
+				<b>Information</b>
+			</div>
+		</div> <!-- item-body -->
+	</div> <!-- item-divider -->
+	</div> <!-- card -->
+
+	<div class="list card">
+	<div class="item item-divider">CHOOSE</div>
+
+		<div class="item item-button-right">
+			<h2>{{vm.isOnline ? "Currently ON" : "Currently OFF"}}</h2>
+
+			<button class="button button-positive icon-left" ng-click="vm.toggleOnOffline()"
+			ng-class="{'ion-checkmark-round': vm.isOnline, 'ion-plus-round button-assertive' : !vm.isOnline}">
+			{{vm.isOnline ? "ON-line!" : "OFF-line"}}
+			</button>
+		</div> <!-- div - item-button -->
+	</div> <!-- item-divider -->
+	</div> <!-- card -->
+
+
+
+	<div class="item item-button-right">
+		<h2>{{vm.isOnline ? "Currently ONline" : "Currently OFFline"}}</h2>
+
+		<button class="button button-positive icon-left" ng-click="vm.toggleOnOffline()"
+			ng-class="{'ion-checkmark-round': vm.isOnline, 'ion-plus-round button-assertive' : !vm.isOnline}">
+			{{vm.isOnline ? "ON-line!" : "OFF-line"}}
+		</button>
+	</div> <!-- div - item-button -->
+
+	<div <div class="item item-divider">
+	Remote DB url= {{vm.urlRemoteCouchDB}}
+	</div>
+
+	<div class="item item-button-right" ng-if="vm._devMode">
+		<h2>{{vm.usingLocalCouchDB ? "Using Local CouchDB" : "Using WEB CouchDB "}}</h2>
+
+		<button class="button button-positive icon-left button-small" ng-click="vm.changeToWebCouchDB()"
+			ng-class="{'ion-checkmark-round': vm.usingLocalCouchDB, 'ion-plus-round button-assertive' : !vm.usingLocalCouchDB}">
+			{{vm.usingLocalCouchDB ? "Click for Remote" : "Click for Local"}}
+		</button>
+	</div> <!-- div - item-button -->
+
+	<div class="item item-button-right">
+		<h2>{{vm._devMode ? "Currently in DEV MODE" : "DEV MODE is OFF"}}</h2>
+
+		<button class="button button-positive icon-left button-small" ng-click="vm.toggleDevMode()"
+			ng-class="{'ion-checkmark-round': vm._devMode, 'ion-plus-round button-assertive' : !vm._devMode}">
+			{{vm._devMode ? "DEV mode ON" : "DEV mode OFF"}}
+		</button>
+	</div> <!-- div - item-button -->
+
+</ion-content>
+</ion-view>

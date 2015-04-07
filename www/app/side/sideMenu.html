@@ -1,0 +1,30 @@
+<ion-side-menus>
+	<ion-pane  ion-side-menu-content>
+		<ion-nav-bar class="bar-balanced">
+      			<ion-nav-back-button class="button-clear icon ion-ios7-arrow-back"></ion-nav-back-button>
+			<ion-nav-buttons side="left">
+				<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+				</button>
+			</ion-nav-buttons>
+			<ion-nav-title>
+				<h2 class="title">amIonTrack</h2>
+			</ion-nav-title>
+		</ion-nav-bar>
+		<ion-nav-view name="woMenu" animation="slide-left-right"></ion-nav-view>
+	</ion-pane>
+
+	<ion-side-menu side="left">
+		<header class="bar bar-header bar-balanced">
+			<h1 class="title">amIonTrack Dashboard</h1>
+		</header>
+		<ion-content class="has-header">
+		<ion-list>
+			<ion-item nav-clear menu-close ui-sref="main.shopLists">Main Tabs</ion-item>
+			<ion-item nav-clear menu-close ui-sref="app.shopList">Workorder Info</ion-item>
+			<ion-item nav-clear menu-close ui-sref="app.shopFuture">Alerts</ion-item>
+			<ion-item nav-clear menu-close ui-sref="app.shopHistory">Materials</ion-item>
+			<ion-item nav-clear menu-close ui-sref="app.shopCosts">Labor</ion-item>
+		</ion-list>
+	</ion-side-menu>
+
+</ion-side-menus>

@@ -1,0 +1,54 @@
+<div class="ion-form" ng-if="vm.editView"> <!-- W/O ADMIN INFO -->
+	Note # {{vm.edit_seqnum}}
+	<div class="item item-input-inset class=bold">
+		<label class="item-input-wrapper">
+			<span class="input-label">Note label: </span>
+			<textarea  ng-model="vm.edit_label" style="font-size: 105%"
+			ng-required="true" ng-trim="true">
+			</textarea>
+		</label>
+	</div> <!-- item -->
+
+	<div class="item item-input-inset class=bold">
+		<label class="item-input-wrapper">
+			<span class="input-label">Your note: </span>
+			<textarea ng-model="vm.edit_desc" style="font-size: 105%"
+			ng-required="true" rows="3" ng-minlength="6" ng-maxlength="250" ng-trim="true">
+			</textarea>
+		</label>
+	</div> <!-- item -->
+
+	<form name="editAlertGroup">
+	<div class="card">
+	<div class="item item-input-inset class=bold  item-divider">
+			<div class="input-label">Importance: 
+			</div>
+			<h2>
+				<input type="radio" ng-model="vm.edit_alert" value="high"
+				name="editAlertGroup">  &nbsp; High  <br/>
+				<input type="radio" ng-model="vm.edit_alert" value="medium"
+				name="editAlertGroup"> &nbsp; Medium   <br/>
+				<input type="radio" ng-model="vm.edit_alert" value="low"
+				name="editAlertGroup"> &nbsp; Fyi   <br/>
+			</h2>
+	</div> <!-- item -->
+	</div>
+	</form>
+
+	
+
+	<ion-item>
+	<div class="row">
+		<div class="col">
+			<button class="button button-block" ng-click="vm.cancelForm()">
+				<b>Cancel</b>
+			</button>
+		</div>
+		<div class="col">
+			<button class="button button-block button-calm" ng-click="vm.submitEdit()">
+				<b>Submit</b>
+			</button>
+		</div>
+	  </div>
+	</ion-item>	
+</div> <!-- ion-form -->

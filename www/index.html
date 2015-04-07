@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <script src="lib/pouchdb.min.js"></script>
+    <script src="lib/ng-cordova.min.js"></script> <!-- must be inserted here, before cordova.js -->
+
+    <!-- Other Libraries -->
+ <!--   
+    <script src="lib/lodash/dist/lodash.min.js"></script>
+    -->
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- Routing & Nav scripts -->
+    <script src="app/app.js"></script>
+
+    <!-- Services & Directives scripts -->
+    <script src="app/appSvcs/appSecSvc.js"></script>
+    <script src="app/appSvcs/appDbSvc.js"></script>
+    <script src="app/appDirs/listAddEditHeader.js"></script>
+    <script src="app/appDirs/adActionButtons.js"></script>
+    
+    <!-- App  Main Tab scripts -->
+    <script src="app/main/loginCtrl.js"></script>
+    <script src="app/main/myInfoCtrl.js"></script>
+    <script src="app/main/categoriesCtrl.js"></script>
+    <script src="app/main/categoriesDirs.js"></script>
+
+  
+
+
+    <!-- App  Side Menu  scripts -->
+
+
+  </head>
+  <body ng-app="amionApp">
+    <ion-nav-view></ion-nav-view>
+  </body>
+</html>

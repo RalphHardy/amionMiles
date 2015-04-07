@@ -1,0 +1,44 @@
+<ion-view>
+<ion-content>
+
+	<ad-list-add-edit-header formname="Your Categories" vmode="{{vm.viewMode}}"
+		method="vm.changeForm(item)"> </ad-list-add-edit-header>
+
+
+<div class="list" ng-if="vm.listView">
+	<ion-refresher on-refresh="doRefresh()">
+		<ion-item class="card wrap" ng-click="vm.gotoEditDelete(item)"
+			ng-repeat="item in vm.dataItems track by $index">
+
+			Note # {{item.seq_num}}
+
+			<div class="button button-full" style="margin: 0px; 0px: 0px; 0px; padding: 0px; font-size: 120%; font-weight: bold">
+			{{item.cat_name}}
+			</div>
+
+			<div class="item item-text-wrap" style="text-align: center; font-size: 105%"> 
+			<br>
+			{{item.cat_desc}}
+			<br>
+			&nbsp;
+			</div>
+			
+		</ion-item>
+	s</ion-refresher>
+	
+
+</div> <!-- div list -->
+
+
+<!--  ADD FORM  -->
+
+<ad-categories-add class="ion-form" ng-if="vm.addView"> <!-- W/O ADMIN INFO -->
+</ad-categories-add>
+
+<!--  EDIT FORM  -->
+<ad-categories-edit class="ion-form" ng-if="vm.editView"> <!-- W/O ADMIN INFO -->
+</ad-categories-edit>
+
+
+</ion-content>
+</ion-view>

@@ -1,0 +1,23 @@
+<div class="ion-form"> <!-- W/O ADMIN INFO -->
+	Seq # {{vm.add_seq_num}}
+	<div class="item item-input-inset class=bold">
+		<label class="item-input-wrapper">
+			<span class="input-label">Category: </span>
+			<textarea placeholder="enter a label for your category" ng-model="vm.dataItem.cat_name"
+			ng-required="true" ng-minlength="6" ng-maxlength="25" ng-trim="true">
+			</textarea>
+		</label>
+	</div> <!-- item -->
+
+	<div class="item item-input-inset class=bold">
+		<label class="item-input-wrapper">
+			<span class="input-label">Description: </span>
+			<textarea placeholder="enter a description" ng-model="vm.dataItem.cat_desc"
+			ng-required="true" rows="3" ng-minlength="6" ng-maxlength="160" ng-trim="true">
+			</textarea>
+		</label>
+	</div> <!-- item -->
+
+	<ad-action-buttons></ad-action-buttons>
+
+</div> <!-- ion-form -->
